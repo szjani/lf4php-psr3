@@ -30,9 +30,11 @@ use Psr\Log\NullLogger;
 
 class Psr3LoggerFactory extends CachedClassLoggerFactory
 {
+    const ROOT_LOGGER_NAME = 'ROOT';
+
     public function __construct()
     {
-        parent::__construct(new Psr3LoggerWrapper(new NullLogger(), Logger::ROOT_LOGGER_NAME));
+        parent::__construct(new Psr3LoggerWrapper(new NullLogger(), self::ROOT_LOGGER_NAME));
     }
 
     public function registerPsr3Logger($classOrNamespace, LoggerInterface $logger)
