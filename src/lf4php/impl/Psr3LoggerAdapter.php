@@ -21,13 +21,13 @@
  * SOFTWARE.
  */
 
-namespace lf4php\psr3;
+namespace lf4php\impl;
 
 use Exception;
 use lf4php\LocationLogger;
 use Psr\Log\LoggerInterface;
 
-class Psr3LoggerWrapper extends LocationLogger
+class Psr3LoggerAdapter extends LocationLogger
 {
     /**
      * @var LoggerInterface

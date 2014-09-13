@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-namespace lf4php\psr3;
+namespace lf4php\impl;
 
 use Exception;
 

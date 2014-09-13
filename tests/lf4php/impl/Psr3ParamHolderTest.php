@@ -21,31 +21,32 @@
  * SOFTWARE.
  */
 
-namespace lf4php\psr3;
+namespace lf4php\impl;
 
+use Exception;
 use PHPUnit_Framework_TestCase;
 
-class Psr3LoggerFactoryTest extends PHPUnit_Framework_TestCase
+class Psr3ParamHolderTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var Psr3LoggerFactory
-     */
-    private $factory;
-
-    public function setUp()
+    public function testConversionWithoutException()
     {
-        $this->factory = new Psr3LoggerFactory();
+        $lf4phpFormat = "{} {}!";
+        $lf4phpParams = array("Hello", "World");
+        $holder = Psr3ParamHolder::create($lf4phpFormat, $lf4phpParams);
+        self::assertEquals("{0} {1}!", $holder->getMessage());
+        self::assertSame(array('0' => $lf4phpParams[0], '1' => $lf4phpParams[1]), $holder->getContext());
     }
 
-    public function testRegisterPsr3Logger()
+    public function testWithException()
     {
-        $psr3Logger = $this->getMock('\Psr\Log\LoggerInterface');
-        $this->factory->registerPsr3Logger(__CLASS__, $psr3Logger);
-
-        /* @var $lf4phpLogger \lf4php\psr3\Psr3LoggerWrapper */
-        $lf4phpLogger = $this->factory->getLogger(__CLASS__);
-
-        self::assertInstanceOf('\lf4php\psr3\Psr3LoggerWrapper', $lf4phpLogger);
-        self::assertSame($psr3Logger, $lf4phpLogger->getPsr3Logger());
+        $lf4phpFormat = "{} {}!";
+        $lf4phpParams = array("Hello", "World");
+        $exception = new Exception('Ouch');
+        $holder = Psr3ParamHolder::create($lf4phpFormat, $lf4phpParams, $exception);
+        self::assertEquals("{0} {1}!", $holder->getMessage());
+        self::assertSame(
+            array('0' => $lf4phpParams[0], '1' => $lf4phpParams[1], 'exception' => $exception),
+            $holder->getContext()
+        );
     }
 }

@@ -21,24 +21,31 @@
  * SOFTWARE.
  */
 
-namespace lf4php\psr3;
+namespace lf4php\impl;
 
-use lf4php\CachedClassLoggerFactory;
-use lf4php\Logger;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use PHPUnit_Framework_TestCase;
 
-class Psr3LoggerFactory extends CachedClassLoggerFactory
+class Psr3LoggerFactoryTest extends PHPUnit_Framework_TestCase
 {
-    const ROOT_LOGGER_NAME = 'ROOT';
+    /**
+     * @var Psr3LoggerFactory
+     */
+    private $factory;
 
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct(new Psr3LoggerWrapper(new NullLogger(), self::ROOT_LOGGER_NAME));
+        $this->factory = new Psr3LoggerFactory();
     }
 
-    public function registerPsr3Logger($classOrNamespace, LoggerInterface $logger)
+    public function testRegisterPsr3Logger()
     {
-        $this->registerLogger($classOrNamespace, new Psr3LoggerWrapper($logger, $classOrNamespace));
+        $psr3Logger = $this->getMock('\Psr\Log\LoggerInterface');
+        $this->factory->registerPsr3Logger(__CLASS__, $psr3Logger);
+
+        /* @var $lf4phpLogger \lf4php\impl\Psr3LoggerAdapter */
+        $lf4phpLogger = $this->factory->getLogger(__CLASS__);
+
+        self::assertInstanceOf('\lf4php\impl\Psr3LoggerAdapter', $lf4phpLogger);
+        self::assertSame($psr3Logger, $lf4phpLogger->getPsr3Logger());
     }
 }

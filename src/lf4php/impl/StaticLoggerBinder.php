@@ -21,32 +21,36 @@
  * SOFTWARE.
  */
 
-namespace lf4php\psr3;
 
-use Exception;
-use PHPUnit_Framework_TestCase;
+namespace lf4php\impl;
 
-class Psr3ParamHolderTest extends PHPUnit_Framework_TestCase
+/**
+ * StaticLoggerBinder for PSR-3.
+ *
+ * @package lf4php\impl
+ * @author Janos Szurovecz <szjani@szjani.hu>
+ */
+final class StaticLoggerBinder
 {
-    public function testConversionWithoutException()
+    /**
+     * @var StaticLoggerBinder
+     */
+    public static $SINGLETON;
+
+    private $loggerFactory;
+
+    public static function init()
     {
-        $lf4phpFormat = "{} {}!";
-        $lf4phpParams = array("Hello", "World");
-        $holder = Psr3ParamHolder::create($lf4phpFormat, $lf4phpParams);
-        self::assertEquals("{0} {1}!", $holder->getMessage());
-        self::assertSame(array('0' => $lf4phpParams[0], '1' => $lf4phpParams[1]), $holder->getContext());
+        self::$SINGLETON = new StaticLoggerBinder();
+        self::$SINGLETON->loggerFactory = new Psr3LoggerFactory();
     }
 
-    public function testWithException()
+    /**
+     * @return Psr3LoggerFactory
+     */
+    public function getLoggerFactory()
     {
-        $lf4phpFormat = "{} {}!";
-        $lf4phpParams = array("Hello", "World");
-        $exception = new Exception('Ouch');
-        $holder = Psr3ParamHolder::create($lf4phpFormat, $lf4phpParams, $exception);
-        self::assertEquals("{0} {1}!", $holder->getMessage());
-        self::assertSame(
-            array('0' => $lf4phpParams[0], '1' => $lf4phpParams[1], 'exception' => $exception),
-            $holder->getContext()
-        );
+        return $this->loggerFactory;
     }
 }
+StaticLoggerBinder::init();
