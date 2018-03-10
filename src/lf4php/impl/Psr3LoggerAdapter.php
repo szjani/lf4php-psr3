@@ -1,25 +1,5 @@
 <?php
-/*
- * Copyright (c) 2014 Szurovecz János
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is furnished to do
- * so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+declare(strict_types=1);
 
 namespace lf4php\impl;
 
@@ -39,7 +19,7 @@ class Psr3LoggerAdapter extends LocationLogger
      */
     private $name;
 
-    public function __construct(LoggerInterface $psr3Logger, $name)
+    public function __construct(LoggerInterface $psr3Logger, string $name)
     {
         $this->psr3Logger = $psr3Logger;
         $this->name = $name;
@@ -49,7 +29,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return LoggerInterface
      */
-    public function getPsr3Logger()
+    public function getPsr3Logger() : LoggerInterface
     {
         return $this->psr3Logger;
     }
@@ -57,7 +37,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -65,7 +45,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return boolean
      */
-    public function isDebugEnabled()
+    public function isDebugEnabled() : bool
     {
         return true;
     }
@@ -73,7 +53,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return boolean
      */
-    public function isErrorEnabled()
+    public function isErrorEnabled() : bool
     {
         return true;
     }
@@ -81,7 +61,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return boolean
      */
-    public function isInfoEnabled()
+    public function isInfoEnabled() : bool
     {
         return true;
     }
@@ -89,7 +69,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return boolean
      */
-    public function isTraceEnabled()
+    public function isTraceEnabled() : bool
     {
         return true;
     }
@@ -97,7 +77,7 @@ class Psr3LoggerAdapter extends LocationLogger
     /**
      * @return boolean
      */
-    public function isWarnEnabled()
+    public function isWarnEnabled() : bool
     {
         return true;
     }
@@ -156,7 +136,7 @@ class Psr3LoggerAdapter extends LocationLogger
         $this->psr3Logger->warning($this->getFormattedLocation() . $holder->getMessage(), $holder->getContext());
     }
 
-    protected function getFormattedLocation()
+    protected function getFormattedLocation() : string
     {
         return $this->getLocationPrefix()
             . $this->getShortLocation(self::DEFAULT_BACKTRACE_LEVEL + 1)
