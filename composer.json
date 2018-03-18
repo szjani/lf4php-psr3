@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "lf4php/lf4php": "dev-feature/make-php-7-1-compatible",
+        "lf4php/lf4php": "~5.0",
         "psr/log": "~1.0"
     },
     "provide": {
